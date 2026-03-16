@@ -6,9 +6,25 @@ const DevMarketplace = () => {
   const { t } = useTranslation();
 
   const developers = [
-    { nameKey: "dev1Name", specialtyKey: "dev1Specialty", icon: ShoppingCart, rating: 4.9, reviews: 127, rate: "$25/hr", online: true },
-    { nameKey: "dev2Name", specialtyKey: "dev2Specialty", icon: Palette, rating: 5.0, reviews: 89, rate: "$30/hr", online: true },
-    { nameKey: "dev3Name", specialtyKey: "dev3Specialty", icon: Code2, rating: 4.8, reviews: 203, rate: "$35/hr", online: false },
+    { 
+      nameKey: "dev1Name", 
+      specialtyKey: "dev1Specialty", 
+      icon: ShoppingCart, 
+      rating: 4.5, 
+      reviews: 127, 
+      rate: "800DA/hr", 
+      online: true,
+      portfolio: "https://ayybdell.vercel.app/"
+    },
+    { 
+      nameKey: "dev2Name", 
+      specialtyKey: "dev2Specialty", 
+      icon: Code2, 
+      rating: 4.5, 
+      reviews: 89, 
+      rate: "800DA/hr", 
+      online: true 
+    },
   ];
 
   return (
@@ -20,7 +36,7 @@ const DevMarketplace = () => {
           <p className="font-body text-lg text-muted-foreground max-w-2xl mx-auto">{t("devMarketplace.subtitle")}</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {developers.map((dev, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.15 }} whileHover={{ y: -4, rotate: 0.5 }} className="bg-card rounded-2xl p-7 border-b-4 border-r-4 border-foreground/10 shadow-lg">
               <div className="flex items-center gap-4 mb-5">
@@ -45,10 +61,24 @@ const DevMarketplace = () => {
                 <span className="font-body font-semibold text-primary">{dev.rate}</span>
               </div>
 
-              <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="w-full px-5 py-3 rounded-xl border-2 border-primary text-primary font-body font-semibold text-sm hover:bg-primary hover:text-primary-foreground transition-all duration-300 flex items-center justify-center gap-2">
-                <Calendar size={16} />
-                {t("devMarketplace.scheduleBtn")}
-              </motion.button>
+              <div className="flex flex-col gap-3">
+                {dev.portfolio && (
+                  <motion.a 
+                    href={dev.portfolio}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.03 }} 
+                    whileTap={{ scale: 0.97 }} 
+                    className="w-full px-5 py-3 rounded-xl border-2 border-primary/20 text-foreground font-body font-semibold text-sm hover:border-primary transition-all duration-300 flex items-center justify-center gap-2"
+                  >
+                    {t("devMarketplace.viewPortfolio")}
+                  </motion.a>
+                )}
+                <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="w-full px-5 py-3 rounded-xl bg-primary text-primary-foreground font-body font-semibold text-sm hover:bg-primary/90 transition-all duration-300 flex items-center justify-center gap-2">
+                  <Calendar size={16} />
+                  {t("devMarketplace.scheduleBtn")}
+                </motion.button>
+              </div>
             </motion.div>
           ))}
         </div>
