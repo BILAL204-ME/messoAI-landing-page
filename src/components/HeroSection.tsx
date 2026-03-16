@@ -73,7 +73,7 @@ const HeroSection = () => {
           >
             <div className="relative">
               <div className="absolute -inset-8 bg-gradient-to-br from-saffron/20 via-primary/10 to-transparent rounded-full blur-3xl" />
-              <img src={buildoriaLogo} alt="Buildoria" className="relative w-full max-w-md lg:max-w-lg drop-shadow-2xl" />
+              <img src={buildoriaLogo} alt="massoAI" className="relative w-full max-w-md lg:max-w-lg drop-shadow-2xl" />
             </div>
           </motion.div>
         </div>

@@ -16,8 +16,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <img src={buildoriaLogo} alt="Buildoria" className="h-10 w-auto brightness-110" />
-              <span className="font-display font-bold text-xl tracking-tight">Buildoria</span>
+              <img src={buildoriaLogo} alt="massoAI" className="h-10 w-auto brightness-110" />
+              <span className="font-display font-bold text-xl tracking-tight">massoAI</span>
             </div>
             <p className="font-body text-sm text-background/60 leading-relaxed">{t("footer.description")}</p>
           </div>
