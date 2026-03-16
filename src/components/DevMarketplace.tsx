@@ -12,7 +12,7 @@ const DevMarketplace = () => {
       icon: ShoppingCart, 
       rating: 4.5, 
       reviews: 127, 
-      rate: "800DA/hr", 
+      rate: t("devMarketplace.devRate"), 
       online: true,
       portfolio: "https://ayybdell.vercel.app/"
     },
@@ -22,7 +22,7 @@ const DevMarketplace = () => {
       icon: Code2, 
       rating: 4.5, 
       reviews: 89, 
-      rate: "800DA/hr", 
+      rate: t("devMarketplace.devRate"), 
       online: true 
     },
   ];
