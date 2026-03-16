@@ -1,11 +1,13 @@
 import { motion } from "framer-motion";
 import { Sparkles, Users } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import buildoriaLogo from "@/assets/buildoria-logo.png";
 
 const HeroSection = () => {
+  const { t } = useTranslation();
+
   return (
     <section className="relative min-h-screen flex items-center pt-20 lg:pt-0 overflow-hidden">
-      {/* Background split */}
       <div className="absolute inset-0 hidden lg:flex">
         <div className="w-1/2 bg-gradient-to-br from-saffron/10 to-transparent" />
         <div className="w-1/2 bg-gradient-to-bl from-primary/10 to-transparent" />
@@ -14,7 +16,6 @@ const HeroSection = () => {
 
       <div className="relative max-w-7xl mx-auto px-5 lg:px-8 py-16 lg:py-0 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          {/* Text */}
           <div className="lg:col-span-7">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -22,14 +23,14 @@ const HeroSection = () => {
               transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
             >
               <p className="font-body text-sm font-semibold uppercase tracking-widest text-primary mb-4">
-                Plataforma de creación web
+                {t("hero.badge")}
               </p>
               <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-extrabold tracking-tighter leading-[0.9] text-foreground text-balance">
-                Construye tu sitio web{" "}
-                <span className="text-saffron">en minutos.</span>
+                {t("hero.title")}{" "}
+                <span className="text-saffron">{t("hero.titleHighlight")}</span>
               </h1>
-              <p className="mt-6 font-body text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl" style={{ textWrap: "pretty" as any }}>
-                Elige la velocidad de la IA o el toque maestro de un desarrollador experto. Sin complicaciones.
+              <p className="mt-6 font-body text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl">
+                {t("hero.subtitle")}
               </p>
 
               <div className="mt-10 flex flex-col sm:flex-row gap-4">
@@ -40,7 +41,7 @@ const HeroSection = () => {
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-saffron text-accent-foreground font-body font-bold text-base shadow-[0_6px_0_0_hsl(var(--saffron-dark))] hover:shadow-[0_3px_0_0_hsl(var(--saffron-dark))] hover:translate-y-[3px] transition-all duration-200"
                 >
                   <Sparkles size={20} />
-                  Empezar con IA
+                  {t("hero.ctaAI")}
                 </motion.a>
                 <motion.a
                   href="#developers"
@@ -49,22 +50,21 @@ const HeroSection = () => {
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border-2 border-primary text-primary font-body font-bold text-base hover:bg-primary hover:text-primary-foreground transition-all duration-300"
                 >
                   <Users size={20} />
-                  Agendar Desarrollador
+                  {t("hero.ctaDev")}
                 </motion.a>
               </div>
 
-              <div className="mt-8 flex items-center gap-6 text-sm font-body text-muted-foreground">
+              <div className="mt-8 flex items-center gap-6 text-sm font-body text-muted-foreground flex-wrap">
                 <span className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald animate-pulse-emerald" />
-                  98% satisfacción
+                  {t("hero.satisfaction")}
                 </span>
-                <span>⚡ Webs en 0.8s</span>
-                <span>🌎 LatAm #1</span>
+                <span>{t("hero.speed")}</span>
+                <span>{t("hero.region")}</span>
               </div>
             </motion.div>
           </div>
 
-          {/* Hero illustration */}
           <motion.div
             className="lg:col-span-5 flex justify-center"
             initial={{ opacity: 0, scale: 0.8 }}
@@ -73,11 +73,7 @@ const HeroSection = () => {
           >
             <div className="relative">
               <div className="absolute -inset-8 bg-gradient-to-br from-saffron/20 via-primary/10 to-transparent rounded-full blur-3xl" />
-              <img
-                src={buildoriaLogo}
-                alt="Buildoria - IA y desarrolladores construyendo la web"
-                className="relative w-full max-w-md lg:max-w-lg drop-shadow-2xl"
-              />
+              <img src={buildoriaLogo} alt="Buildoria" className="relative w-full max-w-md lg:max-w-lg drop-shadow-2xl" />
             </div>
           </motion.div>
         </div>
