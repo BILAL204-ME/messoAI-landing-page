@@ -1,13 +1,18 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import buildoriaLogo from "@/assets/buildoria-logo.png";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { useAuth } from "@/hooks/use-auth";
+import RegisterModal from "./RegisterModal";
+import { Button } from "./ui/button";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const { t, i18n } = useTranslation();
+  const { isLoggedIn, logout } = useAuth();
 
   useEffect(() => {
     document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";
@@ -39,16 +44,41 @@ const Navbar = () => {
 
         <div className="hidden md:flex items-center gap-3">
           <LanguageSwitcher />
-          <a href="#ai-builder" className="px-5 py-2.5 rounded-full bg-saffron text-accent-foreground font-body font-semibold text-sm shadow-[0_4px_0_0_hsl(var(--saffron-dark))] hover:shadow-[0_2px_0_0_hsl(var(--saffron-dark))] hover:translate-y-[2px] transition-all duration-200">
-            {t("nav.startAI")}
-          </a>
-          <a href="#developers" className="px-5 py-2.5 rounded-full border-2 border-primary text-primary font-body font-semibold text-sm hover:bg-primary hover:text-primary-foreground transition-all duration-300">
-            {t("nav.scheduleDev")}
-          </a>
+          
+          {isLoggedIn ? (
+            <button 
+              onClick={logout}
+              className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors border border-primary/20"
+              title={t("auth.logout")}
+            >
+              <User size={20} />
+            </button>
+          ) : (
+            <>
+              <Button 
+                variant="ghost" 
+                onClick={() => setIsRegisterOpen(true)}
+                className="font-body font-semibold text-sm"
+              >
+                {t("auth.register")}
+              </Button>
+              <a href="#ai-builder" className="px-5 py-2.5 rounded-full bg-saffron text-accent-foreground font-body font-semibold text-sm shadow-[0_4px_0_0_hsl(var(--saffron-dark))] hover:shadow-[0_2px_0_0_hsl(var(--saffron-dark))] hover:translate-y-[2px] transition-all duration-200">
+                {t("nav.startAI")}
+              </a>
+            </>
+          )}
         </div>
 
         <div className="flex md:hidden items-center gap-2">
           <LanguageSwitcher />
+          {isLoggedIn && (
+             <button 
+              onClick={logout}
+              className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20"
+            >
+              <User size={16} />
+            </button>
+          )}
           <button className="text-foreground" onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -71,17 +101,31 @@ const Navbar = () => {
                 </a>
               ))}
               <div className="flex flex-col gap-3 pt-2">
+                {!isLoggedIn && (
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      setIsOpen(false);
+                      setIsRegisterOpen(true);
+                    }}
+                    className="rounded-full py-6"
+                  >
+                    {t("auth.register")}
+                  </Button>
+                )}
                 <a href="#ai-builder" className="px-5 py-3 rounded-full bg-saffron text-accent-foreground font-body font-semibold text-sm text-center shadow-[0_4px_0_0_hsl(var(--saffron-dark))]">
                   {t("nav.startAI")}
-                </a>
-                <a href="#developers" className="px-5 py-3 rounded-full border-2 border-primary text-primary font-body font-semibold text-sm text-center">
-                  {t("nav.scheduleDev")}
                 </a>
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <RegisterModal 
+        open={isRegisterOpen} 
+        onOpenChange={setIsRegisterOpen} 
+      />
     </nav>
   );
 };

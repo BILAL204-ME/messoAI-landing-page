@@ -122,5 +122,19 @@
     "cookies": "الكوكيز",
     "rights": "© 2026 massoAI. جميع الحقوق محفوظة.",
     "madeWith": "صُنع بـ 🧡"
+  },
+  "auth": {
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب",
+    "logout": "تسجيل الخروج",
+    "fullname": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
+    "phoneNumber": "رقم الهاتف",
+    "password": "كلمة المرور",
+    "createAccount": "أنشئ حساباً",
+    "registerDescription": "أدخل تفاصيلك للتسجيل في massoAI.",
+    "registerSuccess": "تم التسجيل بنجاح",
+    "welcomeMessage": "مرحباً بك في massoAI!",
+    "registerError": "فشل التسجيل"
   }
 }

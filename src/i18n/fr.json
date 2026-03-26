@@ -122,5 +122,19 @@
     "cookies": "Cookies",
     "rights": "© 2026 massoAI. Tous droits réservés.",
     "madeWith": "Fait avec 🧡"
+  },
+  "auth": {
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "logout": "Déconnexion",
+    "fullname": "Nom Complet",
+    "email": "Email",
+    "phoneNumber": "Numéro de Téléphone",
+    "password": "Mot de Passe",
+    "createAccount": "Créer un compte",
+    "registerDescription": "Entrez vos détails pour vous inscrire sur massoAI.",
+    "registerSuccess": "Inscription réussie",
+    "welcomeMessage": "Bienvenue sur massoAI !",
+    "registerError": "Échec de l'inscription"
   }
 }
