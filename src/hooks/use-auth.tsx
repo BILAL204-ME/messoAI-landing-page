@@ -13,6 +13,7 @@ interface AuthContextType {
   accessToken: string | null;
   isLoading: boolean;
   register: (data: any) => Promise<void>;
+  login: (data: any) => Promise<void>;
   logout: () => void;
   isLoggedIn: boolean;
 }
@@ -70,6 +71,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem("masso_user", JSON.stringify(data.user));
   };
 
+  const login = async (formData: any) => {
+    const response = await fetch(API_ENDPOINTS.LOGIN, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Login failed");
+    }
+
+    const data = await response.json();
+    setUser(data.user);
+    setAccessToken(data.accessToken);
+    
+    // Save user info to local storage for persistence (except tokens)
+    localStorage.setItem("masso_user", JSON.stringify(data.user));
+  };
+
   const logout = async () => {
     try {
       await fetch(API_ENDPOINTS.LOGOUT, {
@@ -106,6 +128,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         accessToken,
         isLoading,
         register,
+        login,
         logout,
         isLoggedIn: !!user,
       }}
