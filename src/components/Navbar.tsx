@@ -6,11 +6,13 @@ import buildoriaLogo from "@/assets/buildoria-logo.png";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useAuth } from "@/hooks/use-auth";
 import RegisterModal from "./RegisterModal";
+import LoginModal from "./LoginModal";
 import { Button } from "./ui/button";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
   const { t, i18n } = useTranslation();
   const { isLoggedIn, logout } = useAuth();
 
@@ -124,7 +126,19 @@ const Navbar = () => {
 
       <RegisterModal 
         open={isRegisterOpen} 
-        onOpenChange={setIsRegisterOpen} 
+        onOpenChange={setIsRegisterOpen}
+        onLoginClick={() => {
+          setIsRegisterOpen(false);
+          setIsLoginOpen(true);
+        }}
+      />
+      <LoginModal 
+        open={isLoginOpen} 
+        onOpenChange={setIsLoginOpen}
+        onRegisterClick={() => {
+          setIsLoginOpen(false);
+          setIsRegisterOpen(true);
+        }}
       />
     </nav>
   );

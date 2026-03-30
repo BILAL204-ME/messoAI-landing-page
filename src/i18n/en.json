@@ -135,6 +135,13 @@
     "registerDescription": "Enter your details to register with massoAI.",
     "registerSuccess": "Registration Successful",
     "welcomeMessage": "Welcome to massoAI!",
-    "registerError": "Registration Failed"
+    "registerError": "Registration Failed",
+    "alreadyHaveAccount": "Already have an account?",
+    "signIn": "Sign In",
+    "loginDescription": "Enter your credentials to sign in to massoAI.",
+    "loginSuccess": "Login Successful",
+    "welcomeBack": "Welcome back!",
+    "loginError": "Login Failed",
+    "dontHaveAccount": "Don't have an account?"
   }
 }
