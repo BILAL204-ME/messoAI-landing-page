@@ -143,5 +143,28 @@
     "welcomeBack": "Welcome back!",
     "loginError": "Login Failed",
     "dontHaveAccount": "Don't have an account?"
+  },
+  "errors": {
+    "userAlreadyExists": "It looks like you already have an account. Please try logging in instead.",
+    "userNotFound": "We couldn't find an account with that email. Please check your email or sign up.",
+    "invalidPassword": "That password doesn't look right. Please try again or reset your password.",
+    "internalServerError": "Something went wrong on our end. Please try again in a moment.",
+    "sessionExpired": "Your session has expired. Please log in again.",
+    "validationFailed": "Please check your information and try again."
+  },
+  "password": {
+    "enterPassword": "Enter a password",
+    "weakPassword": "Weak password",
+    "mediumPassword": "Medium password!",
+    "strongPassword": "Strong password!!",
+    "veryStrongPassword": "Very Strong password!!!",
+    "mustContain": "Must contain:",
+    "atLeast8Chars": "At least 8 characters",
+    "atLeast1Number": "At least 1 number",
+    "atLeast1Lowercase": "At least 1 lowercase letter",
+    "atLeast1Uppercase": "At least 1 uppercase letter",
+    "atLeast1Special": "At least 1 special character",
+    "requirementMet": "Requirement met",
+    "enterPhoneNumber": "Enter phone number"
   }
 }

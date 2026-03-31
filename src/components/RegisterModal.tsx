@@ -5,6 +5,8 @@ import * as z from "zod";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import { useErrorHandler } from "@/lib/error-handler";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Dialog,
   DialogContent,
@@ -26,13 +28,16 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { FormErrors } from "@/components/ui/field-error";
-import { PasswordStrengthIndicator } from "@/components/ui/password-strength";
+import { PasswordInput } from "@/components/ui/password-input";
+import PhoneInput from "@/components/ui/phone-input";
+import { AnimatedInput } from "@/components/ui/animated-input";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 
 const registerSchema = z.object({
   fullname: z.string().min(2, "Full name must be at least 2 characters").max(50, "Full name must be less than 50 characters"),
   email: z.string().email("Invalid email address"),
-  phone_number: z.string().regex(/^[+]?[\d\s\-\(\)]+$/, "Phone number can only contain digits, +, spaces, hyphens and parentheses").min(8, "Phone number must be at least 8 characters").max(20, "Phone number must be less than 20 characters"),
-  password: z.string().min(6, "Password must be at least 6 characters").max(100, "Password must be less than 100 characters").regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, "Password must contain at least one uppercase letter, one lowercase letter, and one number"),
+  phone_number: z.string().min(8, "Phone number must be at least 8 characters").max(20, "Phone number must be less than 20 characters"),
+  password: z.string().min(8, "Password must be at least 8 characters").max(100, "Password must be less than 100 characters").regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, "Password must contain at least one uppercase letter, one lowercase letter, and one number"),
 });
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
@@ -45,11 +50,15 @@ interface RegisterModalProps {
 }
 
 const RegisterModal = ({ trigger, open, onOpenChange, onLoginClick }: RegisterModalProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { register } = useAuth();
   const { toast } = useToast();
+  const { handleAuthError } = useErrorHandler();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, { message: string; value?: any }>>({});
+
+  // Check if current language is Arabic to disable animation
+  const isArabic = i18n.language === 'ar';
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -80,15 +89,20 @@ const RegisterModal = ({ trigger, open, onOpenChange, onLoginClick }: RegisterMo
       });
       if (onOpenChange) onOpenChange(false);
     } catch (error: any) {
+      const errorResult = handleAuthError(error, () => {
+        if (onLoginClick) onLoginClick();
+        if (onOpenChange) onOpenChange(false);
+      });
+      
       // Handle field-specific validation errors from backend
-      if (error.errors && typeof error.errors === 'object') {
-        setFieldErrors(error.errors);
+      if (errorResult.errors && typeof errorResult.errors === 'object') {
+        setFieldErrors(errorResult.errors);
       }
       
       toast({
         variant: "destructive",
         title: t("auth.registerError"),
-        description: error.message || "An error occurred during registration",
+        description: errorResult.userMessage,
       });
     } finally {
       setIsSubmitting(false);
@@ -98,7 +112,7 @@ const RegisterModal = ({ trigger, open, onOpenChange, onLoginClick }: RegisterMo
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] w-[95vw] max-w-md mx-auto">
         <DialogHeader>
           <DialogTitle>{t("auth.createAccount")}</DialogTitle>
           <DialogDescription>
@@ -112,10 +126,11 @@ const RegisterModal = ({ trigger, open, onOpenChange, onLoginClick }: RegisterMo
               name="fullname"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("auth.fullname")}</FormLabel>
                   <FormControl>
-                    <Input 
+                    <AnimatedInput 
+                      label={t("auth.fullname")}
                       placeholder="John Doe" 
+                      disableAnimation={isArabic}
                       {...field}
                       className={fieldErrors.fullname ? "border-red-500" : ""}
                       onChange={(e) => {
@@ -133,10 +148,12 @@ const RegisterModal = ({ trigger, open, onOpenChange, onLoginClick }: RegisterMo
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("auth.email")}</FormLabel>
                   <FormControl>
-                    <Input 
+                    <AnimatedInput 
+                      label={t("auth.email")}
+                      type="email"
                       placeholder="john@example.com" 
+                      disableAnimation={isArabic}
                       {...field}
                       className={fieldErrors.email ? "border-red-500" : ""}
                       onChange={(e) => {
@@ -156,14 +173,15 @@ const RegisterModal = ({ trigger, open, onOpenChange, onLoginClick }: RegisterMo
                 <FormItem>
                   <FormLabel>{t("auth.phoneNumber")}</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="+123456789" 
-                      {...field}
-                      className={fieldErrors.phone_number ? "border-red-500" : ""}
-                      onChange={(e) => {
-                        field.onChange(e);
+                    <PhoneInput 
+                      placeholder={t("password.enterPhoneNumber")} 
+                      value={field.value || ''}
+                      onChange={(value) => {
+                        field.onChange(value || '');
                         clearFieldError('phone_number');
                       }}
+                      defaultCountry="DZ"
+                      className={fieldErrors.phone_number ? "border-red-500" : ""}
                     />
                   </FormControl>
                   <FormMessage />
@@ -175,11 +193,10 @@ const RegisterModal = ({ trigger, open, onOpenChange, onLoginClick }: RegisterMo
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("auth.password")}</FormLabel>
                   <FormControl>
-                    <Input 
-                      type="password" 
-                      placeholder="******" 
+                    <PasswordInput 
+                      placeholder={t("password.enterPassword")} 
+                      showUnderline={true}
                       {...field}
                       className={fieldErrors.password ? "border-red-500" : ""}
                       onChange={(e) => {
@@ -189,14 +206,38 @@ const RegisterModal = ({ trigger, open, onOpenChange, onLoginClick }: RegisterMo
                     />
                   </FormControl>
                   <FormMessage />
-                  <PasswordStrengthIndicator password={field.value || ""} />
                 </FormItem>
               )}
             />
             <FormErrors errors={fieldErrors} onClearField={clearFieldError} />
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {t("auth.register")}
+            <Button 
+              type="submit" 
+              className="w-full relative overflow-hidden" 
+              disabled={isSubmitting}
+            >
+              <AnimatePresence mode="wait">
+                {isSubmitting ? (
+                  <motion.div
+                    key="loading"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="flex items-center justify-center gap-2"
+                  >
+                    <LoadingSpinner size="sm" />
+                    {t("auth.register")}
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="submit"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                  >
+                    {t("auth.register")}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </Button>
             <div className="text-center text-sm">
               {t("auth.alreadyHaveAccount")}{" "}

@@ -143,5 +143,28 @@
     "welcomeBack": "مرحباً بعودتك!",
     "loginError": "فشل تسجيل الدخول",
     "dontHaveAccount": "ليس لديك حساب؟"
+  },
+  "errors": {
+    "userAlreadyExists": "يبدو أن لديك حساب بالفعل. يرجى محاولة تسجيل الدخول بدلاً من ذلك.",
+    "userNotFound": "لم نتمكن من العثور على حساب بهذا البريد الإلكتروني. يرجى التحقق من بريدك الإلكتروني أو التسجيل.",
+    "invalidPassword": "كلمة المرور هذه لا تبدو صحيحة. يرجى المحاولة مرة أخرى أو إعادة تعيين كلمة المرور.",
+    "internalServerError": "حدث خطأ ما من جانبنا. يرجى المحاولة مرة أخرى في لحظة.",
+    "sessionExpired": "لقد انتهت جلستك. يرجى تسجيل الدخول مرة أخرى.",
+    "validationFailed": "يرجى التحقق من معلوماتك والمحاولة مرة أخرى."
+  },
+  "password": {
+    "enterPassword": "أدخل كلمة المرور",
+    "weakPassword": "كلمة مرور ضعيفة",
+    "mediumPassword": "كلمة مرور متوسطة!",
+    "strongPassword": "كلمة مرور قوية!!",
+    "veryStrongPassword": "كلمة مرور قوية جدا!!!",
+    "mustContain": "يجب أن تحتوي:",
+    "atLeast8Chars": "8 أحرف على الأقل",
+    "atLeast1Number": "رقم واحد على الأقل",
+    "atLeast1Lowercase": "حرف صغير واحد على الأقل",
+    "atLeast1Uppercase": "حرف كبير واحد على الأقل",
+    "atLeast1Special": "رمز خاص واحد على الأقل",
+    "requirementMet": "الشرط مستوفى",
+    "enterPhoneNumber": "أدخل رقم الهاتف"
   }
 }

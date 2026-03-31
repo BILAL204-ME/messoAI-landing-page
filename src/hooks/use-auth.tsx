@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { API_ENDPOINTS } from "../lib/api-config";
+import { useErrorHandler } from "../lib/error-handler";
 
 interface User {
   id: string;
@@ -60,7 +61,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || "Registration failed");
+      throw errorData;
     }
 
     const data = await response.json();
@@ -81,7 +82,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || "Login failed");
+      throw errorData;
     }
 
     const data = await response.json();

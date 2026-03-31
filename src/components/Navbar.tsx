@@ -48,25 +48,34 @@ const Navbar = () => {
           <LanguageSwitcher />
           
           {isLoggedIn ? (
-            <button 
+            <motion.button 
               onClick={logout}
               className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors border border-primary/20"
               title={t("auth.logout")}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
             >
               <User size={20} />
-            </button>
+            </motion.button>
           ) : (
             <>
-              <Button 
-                variant="ghost" 
-                onClick={() => setIsRegisterOpen(true)}
-                className="font-body font-semibold text-sm"
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button 
+                  variant="ghost" 
+                  onClick={() => setIsRegisterOpen(true)}
+                  className="font-body font-semibold text-sm"
+                >
+                  {t("auth.register")}
+                </Button>
+              </motion.div>
+              <motion.a
+                href="#ai-builder"
+                className="px-5 py-2.5 rounded-full bg-saffron text-accent-foreground font-body font-semibold text-sm shadow-[0_4px_0_0_hsl(var(--saffron-dark))] hover:shadow-[0_2px_0_0_hsl(var(--saffron-dark))] hover:translate-y-[2px] transition-all duration-200"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                {t("auth.register")}
-              </Button>
-              <a href="#ai-builder" className="px-5 py-2.5 rounded-full bg-saffron text-accent-foreground font-body font-semibold text-sm shadow-[0_4px_0_0_hsl(var(--saffron-dark))] hover:shadow-[0_2px_0_0_hsl(var(--saffron-dark))] hover:translate-y-[2px] transition-all duration-200">
                 {t("nav.startAI")}
-              </a>
+              </motion.a>
             </>
           )}
         </div>

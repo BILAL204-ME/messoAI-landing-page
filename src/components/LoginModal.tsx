@@ -5,6 +5,8 @@ import * as z from "zod";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import { useErrorHandler } from "@/lib/error-handler";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Dialog,
   DialogContent,
@@ -24,6 +26,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { AnimatedInput } from "@/components/ui/animated-input";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -40,10 +44,14 @@ interface LoginModalProps {
 }
 
 const LoginModal = ({ trigger, open, onOpenChange, onRegisterClick }: LoginModalProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { login } = useAuth();
   const { toast } = useToast();
+  const { handleAuthError } = useErrorHandler();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Check if current language is Arabic to disable animation
+  const isArabic = i18n.language === 'ar';
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -63,10 +71,11 @@ const LoginModal = ({ trigger, open, onOpenChange, onRegisterClick }: LoginModal
       });
       if (onOpenChange) onOpenChange(false);
     } catch (error: any) {
+      const errorResult = handleAuthError(error);
       toast({
         variant: "destructive",
         title: t("auth.loginError"),
-        description: error.message || "An error occurred during login",
+        description: errorResult.userMessage,
       });
     } finally {
       setIsSubmitting(false);
@@ -76,7 +85,7 @@ const LoginModal = ({ trigger, open, onOpenChange, onRegisterClick }: LoginModal
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] w-[95vw] max-w-md mx-auto">
         <DialogHeader>
           <DialogTitle>{t("auth.signIn")}</DialogTitle>
           <DialogDescription>
@@ -90,9 +99,14 @@ const LoginModal = ({ trigger, open, onOpenChange, onRegisterClick }: LoginModal
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("auth.email")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="john@example.com" {...field} />
+                    <AnimatedInput 
+                      label={t("auth.email")}
+                      type="email"
+                      placeholder="john@example.com" 
+                      disableAnimation={isArabic}
+                      {...field} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -103,17 +117,47 @@ const LoginModal = ({ trigger, open, onOpenChange, onRegisterClick }: LoginModal
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("auth.password")}</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="******" {...field} />
+                    <AnimatedInput 
+                      label={t("auth.password")}
+                      type="password" 
+                      placeholder={t("password.enterPassword")} 
+                      disableAnimation={isArabic}
+                      {...field} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {t("auth.signIn")}
+            <Button 
+              type="submit" 
+              className="w-full relative overflow-hidden" 
+              disabled={isSubmitting}
+            >
+              <AnimatePresence mode="wait">
+                {isSubmitting ? (
+                  <motion.div
+                    key="loading"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="flex items-center justify-center gap-2"
+                  >
+                    <LoadingSpinner size="sm" />
+                    {t("auth.signIn")}
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="submit"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                  >
+                    {t("auth.signIn")}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </Button>
             <div className="text-center text-sm">
               {t("auth.dontHaveAccount")}{" "}
