@@ -150,7 +150,16 @@
     "invalidPassword": "Ce mot de passe ne semble pas correct. Veuillez réessayer ou réinitialiser votre mot de passe.",
     "internalServerError": "Quelque chose s'est mal passé de notre côté. Veuillez réessayer dans un instant.",
     "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
-    "validationFailed": "Veuillez vérifier vos informations et réessayer."
+    "validationFailed": "Veuillez vérifier vos informations et réessayer.",
+    "invalidEmail": "Adresse email invalide",
+    "passwordMinLength": "Le mot de passe doit contenir au moins 6 caractères",
+    "fullnameMinLength": "Le nom complet doit contenir au moins 2 caractères",
+    "fullnameMaxLength": "Le nom complet doit contenir moins de 50 caractères",
+    "phoneMinLength": "Le numéro de téléphone doit contenir au moins 8 caractères",
+    "phoneMaxLength": "Le numéro de téléphone doit contenir moins de 20 caractères",
+    "passwordMinLengthRegister": "Le mot de passe doit contenir au moins 8 caractères",
+    "passwordMaxLength": "Le mot de passe doit contenir moins de 100 caractères",
+    "passwordRegex": "Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule et un chiffre"
   },
   "password": {
     "enterPassword": "Entrez un mot de passe",

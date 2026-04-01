@@ -150,7 +150,16 @@
     "invalidPassword": "That password doesn't look right. Please try again or reset your password.",
     "internalServerError": "Something went wrong on our end. Please try again in a moment.",
     "sessionExpired": "Your session has expired. Please log in again.",
-    "validationFailed": "Please check your information and try again."
+    "validationFailed": "Please check your information and try again.",
+    "invalidEmail": "Invalid email address",
+    "passwordMinLength": "Password must be at least 6 characters",
+    "fullnameMinLength": "Full name must be at least 2 characters",
+    "fullnameMaxLength": "Full name must be less than 50 characters",
+    "phoneMinLength": "Phone number must be at least 8 characters",
+    "phoneMaxLength": "Phone number must be less than 20 characters",
+    "passwordMinLengthRegister": "Password must be at least 8 characters",
+    "passwordMaxLength": "Password must be less than 100 characters",
+    "passwordRegex": "Password must contain at least one uppercase letter, one lowercase letter, and one number"
   },
   "password": {
     "enterPassword": "Enter a password",

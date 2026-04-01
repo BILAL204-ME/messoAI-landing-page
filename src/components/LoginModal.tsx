@@ -27,14 +27,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { AnimatedInput } from "@/components/ui/animated-input";
+import { PasswordInput } from "@/components/ui/password-input";
 import LoadingSpinner from "@/components/ui/loading-spinner";
-
-const loginSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-});
-
-type LoginFormValues = z.infer<typeof loginSchema>;
 
 interface LoginModalProps {
   trigger?: React.ReactNode;
@@ -49,6 +43,14 @@ const LoginModal = ({ trigger, open, onOpenChange, onRegisterClick }: LoginModal
   const { toast } = useToast();
   const { handleAuthError } = useErrorHandler();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Define schema inside component to access translation function
+  const loginSchema = z.object({
+    email: z.string().email(t("errors.invalidEmail")),
+    password: z.string().min(6, t("errors.passwordMinLength")),
+  });
+
+  type LoginFormValues = z.infer<typeof loginSchema>;
 
   // Check if current language is Arabic to disable animation
   const isArabic = i18n.language === 'ar';
@@ -118,11 +120,10 @@ const LoginModal = ({ trigger, open, onOpenChange, onRegisterClick }: LoginModal
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <AnimatedInput 
-                      label={t("auth.password")}
-                      type="password" 
+                    <PasswordInput 
                       placeholder={t("password.enterPassword")} 
-                      disableAnimation={isArabic}
+                      showStrengthIndicator={false}
+                      showUnderline={true}
                       {...field} 
                     />
                   </FormControl>

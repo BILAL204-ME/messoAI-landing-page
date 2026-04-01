@@ -33,15 +33,6 @@ import PhoneInput from "@/components/ui/phone-input";
 import { AnimatedInput } from "@/components/ui/animated-input";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 
-const registerSchema = z.object({
-  fullname: z.string().min(2, "Full name must be at least 2 characters").max(50, "Full name must be less than 50 characters"),
-  email: z.string().email("Invalid email address"),
-  phone_number: z.string().min(8, "Phone number must be at least 8 characters").max(20, "Phone number must be less than 20 characters"),
-  password: z.string().min(8, "Password must be at least 8 characters").max(100, "Password must be less than 100 characters").regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, "Password must contain at least one uppercase letter, one lowercase letter, and one number"),
-});
-
-type RegisterFormValues = z.infer<typeof registerSchema>;
-
 interface RegisterModalProps {
   trigger?: React.ReactNode;
   open?: boolean;
@@ -51,11 +42,21 @@ interface RegisterModalProps {
 
 const RegisterModal = ({ trigger, open, onOpenChange, onLoginClick }: RegisterModalProps) => {
   const { t, i18n } = useTranslation();
-  const { register } = useAuth();
+  const { register: registerUser } = useAuth();
   const { toast } = useToast();
   const { handleAuthError } = useErrorHandler();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, { message: string; value?: any }>>({});
+
+  // Define schema inside component to access translation function
+  const registerSchema = z.object({
+    fullname: z.string().min(2, t("errors.fullnameMinLength")).max(50, t("errors.fullnameMaxLength")),
+    email: z.string().email(t("errors.invalidEmail")),
+    phone_number: z.string().min(8, t("errors.phoneMinLength")).max(20, t("errors.phoneMaxLength")),
+    password: z.string().min(8, t("errors.passwordMinLengthRegister")).max(100, t("errors.passwordMaxLength")).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, t("errors.passwordRegex")),
+  });
+
+  type RegisterFormValues = z.infer<typeof registerSchema>;
 
   // Check if current language is Arabic to disable animation
   const isArabic = i18n.language === 'ar';
@@ -82,7 +83,7 @@ const RegisterModal = ({ trigger, open, onOpenChange, onLoginClick }: RegisterMo
     setIsSubmitting(true);
     setFieldErrors({});
     try {
-      await register(values);
+      await registerUser(values);
       toast({
         title: t("auth.registerSuccess"),
         description: t("auth.welcomeMessage"),
