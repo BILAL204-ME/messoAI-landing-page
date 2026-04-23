@@ -5,7 +5,8 @@
     "developers": "Developers",
     "pricing": "Pricing",
     "startAI": "Start with AI",
-    "scheduleDev": "Schedule Dev"
+    "scheduleDev": "Schedule Dev",
+    "dashboard": "Dashboard"
   },
   "hero": {
     "badge": "Website Creation Platform",
@@ -48,7 +49,14 @@
     "subtitle": "Describe your idea and our AI will create a professional website in seconds. No code, no waiting.",
     "placeholder": "A modern restaurant with an interactive menu...",
     "button": "Generate Website",
-    "tags": ["Restaurant", "E-commerce", "Portfolio", "Blog", "Startup"]
+    "tags": ["Restaurant", "E-commerce", "Portfolio", "Blog", "Startup"],
+    "untitled": "Untitled Project",
+    "save": "Save",
+    "export": "Export",
+    "chatTitle": "AI Website Builder",
+    "chatSubtitle": "Describe the website you want and I'll generate it for you",
+    "inputPlaceholder": "Describe the website you want...",
+    "simResponse": "I've analyzed your request. In a production environment, this would generate a live website preview. The AI builder integration will be connected in a future update. For now, you can see how the interface works!"
   },
   "devMarketplace": {
     "badge": "Developer Marketplace",
@@ -175,5 +183,107 @@
     "atLeast1Special": "At least 1 special character",
     "requirementMet": "Requirement met",
     "enterPhoneNumber": "Enter phone number"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Manage your projects and builds",
+    "newProject": "New Project",
+    "emptyTitle": "No projects yet",
+    "emptyDesc": "Create your first project to get started. Build with AI or work with a developer.",
+    "createFirst": "Create Your First Project",
+    "lastEdited": "Last edited",
+    "status": {
+      "draft": "Draft",
+      "in_progress": "In Progress",
+      "ready": "Ready"
+    }
+  },
+  "newProject": {
+    "title": "Start a New Project",
+    "subtitle": "Choose how you'd like to build your website",
+    "aiTitle": "Build with AI",
+    "aiDesc": "Describe your idea and let AI generate your website instantly",
+    "devTitle": "Work with a Developer",
+    "devDesc": "Connect with an expert developer to build your project",
+    "getStarted": "Get started"
+  },
+  "bookDev": {
+    "title": "Book a Developer",
+    "subtitle": "Choose a developer to work with on your project",
+    "backToList": "Back to developers",
+    "selectDate": "Select a Date",
+    "availableSlots": "Available Times",
+    "projectDetails": "Project Details",
+    "projectIdea": "Project Idea",
+    "ideaPlaceholder": "Describe your project idea, goals, and any specific requirements...",
+    "budget": "Budget Range",
+    "selectBudget": "Select budget range",
+    "language": "Preferred Language",
+    "selectLanguage": "Select language",
+    "confirm": "Confirm Booking",
+    "submitting": "Booking..."
+  },
+  "bookConfirm": {
+    "title": "Booking Confirmed!",
+    "subtitle": "Your meeting has been scheduled successfully",
+    "notFound": "Booking not found",
+    "backToDashboard": "Back to Dashboard",
+    "minutes": "minutes",
+    "projectBrief": "Project Brief",
+    "emailSent": "A confirmation email has been sent with the meeting details.",
+    "addToCalendar": "Add to Google Calendar"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account and preferences",
+    "profile": "Profile",
+    "fullname": "Full Name",
+    "email": "Email",
+    "saveProfile": "Save Profile",
+    "saving": "Saving...",
+    "profileSaved": "Profile updated successfully",
+    "profileError": "Failed to update profile",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm New Password",
+    "updatePassword": "Update Password",
+    "passwordChanged": "Password changed successfully",
+    "passwordError": "Failed to change password",
+    "passwordMismatch": "Passwords don't match",
+    "notifications": "Notifications",
+    "notifyBooking": "Booking notifications",
+    "notifyBookingDesc": "Get notified when a booking is confirmed",
+    "notifyAiReady": "AI build ready",
+    "notifyAiReadyDesc": "Get notified when your AI build is ready",
+    "saveNotifications": "Save Preferences",
+    "settingsSaved": "Settings saved",
+    "settingsError": "Failed to save settings",
+    "dangerZone": "Danger Zone",
+    "dangerDesc": "Once you delete your account, there is no going back. Please be certain.",
+    "deleteAccount": "Delete Account",
+    "deleteConfirmTitle": "Are you sure?",
+    "deleteConfirmDesc": "This action cannot be undone. All your projects and data will be permanently deleted.",
+    "enterPassword": "Enter your password to confirm",
+    "cancel": "Cancel",
+    "confirmDelete": "Delete Account",
+    "deleting": "Deleting...",
+    "deleteError": "Failed to delete account"
+  },
+  "myProjects": {
+    "title": "My Projects",
+    "subtitle": "All your AI builds and developer meetings",
+    "filterAll": "All",
+    "filterAI": "AI Built",
+    "filterDev": "Dev Meetings",
+    "empty": "No projects found",
+    "createNew": "Create a Project",
+    "typeAI": "AI Build",
+    "typeDev": "Dev Meeting",
+    "deleted": "Project deleted",
+    "deleteError": "Failed to delete project",
+    "deleteConfirmTitle": "Delete this project?",
+    "deleteConfirmDesc": "This action cannot be undone.",
+    "confirmDelete": "Delete"
   }
 }

@@ -5,7 +5,8 @@
     "developers": "Développeurs",
     "pricing": "Tarifs",
     "startAI": "Commencer avec l'IA",
-    "scheduleDev": "Réserver un Dev"
+    "scheduleDev": "Réserver un Dev",
+    "dashboard": "Tableau de bord"
   },
   "hero": {
     "badge": "Plateforme de création web",
@@ -48,7 +49,14 @@
     "subtitle": "Décrivez votre idée et notre intelligence artificielle créera un site professionnel en quelques secondes. Sans code, sans attente.",
     "placeholder": "Un restaurant moderne avec menu interactif...",
     "button": "Générer le Site",
-    "tags": ["Restaurant", "E-commerce", "Portfolio", "Blog", "Startup"]
+    "tags": ["Restaurant", "E-commerce", "Portfolio", "Blog", "Startup"],
+    "untitled": "Projet sans titre",
+    "save": "Enregistrer",
+    "export": "Exporter",
+    "chatTitle": "Constructeur de Sites IA",
+    "chatSubtitle": "Décrivez le site que vous voulez et je le génèrerai pour vous",
+    "inputPlaceholder": "Décrivez le site que vous souhaitez...",
+    "simResponse": "J'ai analysé votre demande. En production, cela générerait un aperçu de site en direct. L'intégration du constructeur IA sera connectée dans une mise à jour future."
   },
   "devMarketplace": {
     "badge": "Marketplace de Développeurs",
@@ -175,5 +183,107 @@
     "atLeast1Special": "Au moins 1 caractère spécial",
     "requirementMet": "Condition remplie",
     "enterPhoneNumber": "Entrez le numéro de téléphone"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "subtitle": "Gérez vos projets et constructions",
+    "newProject": "Nouveau Projet",
+    "emptyTitle": "Pas encore de projets",
+    "emptyDesc": "Créez votre premier projet pour commencer. Construisez avec l'IA ou travaillez avec un développeur.",
+    "createFirst": "Créer votre premier projet",
+    "lastEdited": "Dernière modification",
+    "status": {
+      "draft": "Brouillon",
+      "in_progress": "En cours",
+      "ready": "Prêt"
+    }
+  },
+  "newProject": {
+    "title": "Démarrer un nouveau projet",
+    "subtitle": "Choisissez comment construire votre site web",
+    "aiTitle": "Construire avec l'IA",
+    "aiDesc": "Décrivez votre idée et laissez l'IA générer votre site instantanément",
+    "devTitle": "Travailler avec un développeur",
+    "devDesc": "Connectez-vous avec un développeur expert pour construire votre projet",
+    "getStarted": "Commencer"
+  },
+  "bookDev": {
+    "title": "Réserver un développeur",
+    "subtitle": "Choisissez un développeur pour travailler sur votre projet",
+    "backToList": "Retour aux développeurs",
+    "selectDate": "Sélectionnez une date",
+    "availableSlots": "Horaires disponibles",
+    "projectDetails": "Détails du projet",
+    "projectIdea": "Idée du projet",
+    "ideaPlaceholder": "Décrivez votre idée de projet, vos objectifs et vos exigences spécifiques...",
+    "budget": "Fourchette de budget",
+    "selectBudget": "Sélectionnez une fourchette",
+    "language": "Langue préférée",
+    "selectLanguage": "Sélectionnez la langue",
+    "confirm": "Confirmer la réservation",
+    "submitting": "Réservation en cours..."
+  },
+  "bookConfirm": {
+    "title": "Réservation confirmée !",
+    "subtitle": "Votre réunion a été planifiée avec succès",
+    "notFound": "Réservation introuvable",
+    "backToDashboard": "Retour au tableau de bord",
+    "minutes": "minutes",
+    "projectBrief": "Résumé du projet",
+    "emailSent": "Un email de confirmation a été envoyé avec les détails de la réunion.",
+    "addToCalendar": "Ajouter à Google Calendar"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Gérez votre compte et vos préférences",
+    "profile": "Profil",
+    "fullname": "Nom complet",
+    "email": "Email",
+    "saveProfile": "Enregistrer le profil",
+    "saving": "Enregistrement...",
+    "profileSaved": "Profil mis à jour avec succès",
+    "profileError": "Échec de la mise à jour du profil",
+    "changePassword": "Changer le mot de passe",
+    "currentPassword": "Mot de passe actuel",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le nouveau mot de passe",
+    "updatePassword": "Mettre à jour le mot de passe",
+    "passwordChanged": "Mot de passe changé avec succès",
+    "passwordError": "Échec du changement de mot de passe",
+    "passwordMismatch": "Les mots de passe ne correspondent pas",
+    "notifications": "Notifications",
+    "notifyBooking": "Notifications de réservation",
+    "notifyBookingDesc": "Être notifié quand une réservation est confirmée",
+    "notifyAiReady": "Construction IA prête",
+    "notifyAiReadyDesc": "Être notifié quand votre construction IA est prête",
+    "saveNotifications": "Enregistrer les préférences",
+    "settingsSaved": "Paramètres enregistrés",
+    "settingsError": "Échec de l'enregistrement des paramètres",
+    "dangerZone": "Zone de danger",
+    "dangerDesc": "Une fois votre compte supprimé, il n'y a pas de retour en arrière. Soyez certain.",
+    "deleteAccount": "Supprimer le compte",
+    "deleteConfirmTitle": "Êtes-vous sûr ?",
+    "deleteConfirmDesc": "Cette action est irréversible. Tous vos projets et données seront supprimés définitivement.",
+    "enterPassword": "Entrez votre mot de passe pour confirmer",
+    "cancel": "Annuler",
+    "confirmDelete": "Supprimer le compte",
+    "deleting": "Suppression...",
+    "deleteError": "Échec de la suppression du compte"
+  },
+  "myProjects": {
+    "title": "Mes Projets",
+    "subtitle": "Toutes vos constructions IA et réunions développeurs",
+    "filterAll": "Tous",
+    "filterAI": "IA",
+    "filterDev": "Dev",
+    "empty": "Aucun projet trouvé",
+    "createNew": "Créer un projet",
+    "typeAI": "Construction IA",
+    "typeDev": "Réunion Dev",
+    "deleted": "Projet supprimé",
+    "deleteError": "Échec de la suppression du projet",
+    "deleteConfirmTitle": "Supprimer ce projet ?",
+    "deleteConfirmDesc": "Cette action est irréversible.",
+    "confirmDelete": "Supprimer"
   }
 }

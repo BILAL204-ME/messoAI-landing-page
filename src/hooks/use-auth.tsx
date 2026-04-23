@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { API_ENDPOINTS } from "../lib/api-config";
-import { useErrorHandler } from "../lib/error-handler";
+import { setAccessToken } from "../lib/api-client";
 
 interface User {
   id: string;
@@ -23,8 +23,14 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [accessToken, setAccessTokenState] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Sync token to api-client whenever it changes
+  const updateAccessToken = useCallback((token: string | null) => {
+    setAccessTokenState(token);
+    setAccessToken(token);
+  }, []);
 
   const refreshAccessToken = useCallback(async () => {
     try {
@@ -36,20 +42,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (response.ok) {
         const data = await response.json();
-        setAccessToken(data.accessToken);
+        updateAccessToken(data.accessToken);
         return data.accessToken;
       } else {
-        setAccessToken(null);
+        updateAccessToken(null);
         setUser(null);
         return null;
       }
     } catch (error) {
       console.error("Token refresh failed:", error);
-      setAccessToken(null);
+      updateAccessToken(null);
       setUser(null);
       return null;
     }
-  }, []);
+  }, [updateAccessToken]);
 
   const register = async (formData: any) => {
     const response = await fetch(API_ENDPOINTS.REGISTER, {
@@ -66,7 +72,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const data = await response.json();
     setUser(data.user);
-    setAccessToken(data.accessToken);
+    updateAccessToken(data.accessToken);
     
     // Save user info to local storage for persistence (except tokens)
     localStorage.setItem("masso_user", JSON.stringify(data.user));
@@ -87,7 +93,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const data = await response.json();
     setUser(data.user);
-    setAccessToken(data.accessToken);
+    updateAccessToken(data.accessToken);
     
     // Save user info to local storage for persistence (except tokens)
     localStorage.setItem("masso_user", JSON.stringify(data.user));
@@ -103,7 +109,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error("Logout failed:", error);
     } finally {
       setUser(null);
-      setAccessToken(null);
+      updateAccessToken(null);
       localStorage.removeItem("masso_user");
     }
   };

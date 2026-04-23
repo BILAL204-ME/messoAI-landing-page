@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, User } from "lucide-react";
+import { Menu, X, User, LayoutDashboard, FolderOpen, Settings, LogOut, ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import buildoriaLogo from "@/assets/buildoria-logo.png";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -8,13 +9,21 @@ import { useAuth } from "@/hooks/use-auth";
 import RegisterModal from "./RegisterModal";
 import LoginModal from "./LoginModal";
 import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const { t, i18n } = useTranslation();
-  const { isLoggedIn, logout } = useAuth();
+  const { user, isLoggedIn, logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";
@@ -27,6 +36,15 @@ const Navbar = () => {
     { label: t("nav.developers"), href: "#developers" },
     { label: t("nav.pricing"), href: "#pricing" },
   ];
+
+  const userInitials = user?.fullname
+    ? user.fullname.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
+    : "U";
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
@@ -48,15 +66,50 @@ const Navbar = () => {
           <LanguageSwitcher />
           
           {isLoggedIn ? (
-            <motion.button 
-              onClick={logout}
-              className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors border border-primary/20"
-              title={t("auth.logout")}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <User size={20} />
-            </motion.button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate("/dashboard")}
+                className="font-body font-semibold text-sm"
+              >
+                {t("nav.dashboard", "Dashboard")}
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg hover:bg-muted transition-colors" id="navbar-user-menu">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-xs font-bold">
+                      {userInitials}
+                    </div>
+                    <ChevronDown size={14} className="text-muted-foreground" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <div className="px-3 py-2">
+                    <p className="text-sm font-medium">{user?.fullname}</p>
+                    <p className="text-xs text-muted-foreground">{user?.email}</p>
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate("/dashboard")}>
+                    <LayoutDashboard size={14} className="mr-2" />
+                    {t("dashboard.title", "Dashboard")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/projects")}>
+                    <FolderOpen size={14} className="mr-2" />
+                    {t("myProjects.title", "My Projects")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/settings")}>
+                    <Settings size={14} className="mr-2" />
+                    {t("settings.title", "Settings")}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
+                    <LogOut size={14} className="mr-2" />
+                    {t("auth.logout", "Logout")}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           ) : (
             <>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -83,11 +136,11 @@ const Navbar = () => {
         <div className="flex md:hidden items-center gap-2">
           <LanguageSwitcher />
           {isLoggedIn && (
-             <button 
-              onClick={logout}
-              className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20"
+            <button 
+              onClick={() => navigate("/dashboard")}
+              className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-xs font-bold border border-primary/20"
             >
-              <User size={16} />
+              {userInitials}
             </button>
           )}
           <button className="text-foreground" onClick={() => setIsOpen(!isOpen)}>
@@ -111,8 +164,38 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
+              {isLoggedIn && (
+                <>
+                  <a
+                    onClick={() => { setIsOpen(false); navigate("/dashboard"); }}
+                    className="font-body text-base text-foreground cursor-pointer"
+                  >
+                    {t("dashboard.title", "Dashboard")}
+                  </a>
+                  <a
+                    onClick={() => { setIsOpen(false); navigate("/projects"); }}
+                    className="font-body text-base text-foreground cursor-pointer"
+                  >
+                    {t("myProjects.title", "My Projects")}
+                  </a>
+                  <a
+                    onClick={() => { setIsOpen(false); navigate("/settings"); }}
+                    className="font-body text-base text-foreground cursor-pointer"
+                  >
+                    {t("settings.title", "Settings")}
+                  </a>
+                </>
+              )}
               <div className="flex flex-col gap-3 pt-2">
-                {!isLoggedIn && (
+                {isLoggedIn ? (
+                  <Button
+                    variant="outline"
+                    onClick={() => { setIsOpen(false); handleLogout(); }}
+                    className="rounded-full py-6"
+                  >
+                    {t("auth.logout", "Logout")}
+                  </Button>
+                ) : (
                   <Button 
                     variant="outline" 
                     onClick={() => {
