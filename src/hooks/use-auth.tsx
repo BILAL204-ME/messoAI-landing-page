@@ -15,6 +15,7 @@ interface AuthContextType {
   isLoading: boolean;
   register: (data: any) => Promise<void>;
   login: (data: any) => Promise<void>;
+  googleLogin: (token: string) => Promise<void>;
   logout: () => void;
   isLoggedIn: boolean;
 }
@@ -99,6 +100,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem("masso_user", JSON.stringify(data.user));
   };
 
+  const googleLogin = async (token: string) => {
+    const response = await fetch(API_ENDPOINTS.GOOGLE_LOGIN, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ googleToken: token }),
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw errorData;
+    }
+
+    const data = await response.json();
+    setUser(data.user);
+    updateAccessToken(data.accessToken);
+    
+    // Save user info to local storage for persistence (except tokens)
+    localStorage.setItem("masso_user", JSON.stringify(data.user));
+  };
+
   const logout = async () => {
     try {
       await fetch(API_ENDPOINTS.LOGOUT, {
@@ -136,6 +158,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoading,
         register,
         login,
+        googleLogin,
         logout,
         isLoggedIn: !!user,
       }}

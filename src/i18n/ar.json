@@ -150,7 +150,9 @@
     "loginSuccess": "تم تسجيل الدخول بنجاح",
     "welcomeBack": "مرحباً بعودتك!",
     "loginError": "فشل تسجيل الدخول",
-    "dontHaveAccount": "ليس لديك حساب؟"
+    "dontHaveAccount": "ليس لديك حساب؟",
+    "orContinueWithEmail": "أو تابع باستخدام البريد الإلكتروني",
+    "googleAuthFailed": "فشلت مصادقة Google"
   },
   "errors": {
     "userAlreadyExists": "يبدو أن لديك حساب بالفعل. يرجى محاولة تسجيل الدخول بدلاً من ذلك.",

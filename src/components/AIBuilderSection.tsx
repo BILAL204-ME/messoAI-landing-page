@@ -1,14 +1,25 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Sparkles, ArrowRight, ArrowLeft } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const AIBuilderSection = () => {
   const [inputFocused, setInputFocused] = useState(false);
+  const [prompt, setPrompt] = useState("");
+  const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === "ar";
   const ArrowIcon = isRTL ? ArrowLeft : ArrowRight;
   const tags = t("aiBuilder.tags", { returnObjects: true }) as string[];
+
+  const handleGenerate = () => {
+    if (prompt.trim()) {
+      navigate(`/builder?prompt=${encodeURIComponent(prompt.trim())}`);
+    } else {
+      navigate("/builder");
+    }
+  };
 
   return (
     <section className="py-24 lg:py-32 bg-gradient-to-b from-saffron/5 to-transparent" id="ai-builder">
@@ -28,12 +39,20 @@ const AIBuilderSection = () => {
               <input
                 type="text"
                 placeholder={t("aiBuilder.placeholder")}
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
                 className="flex-1 px-6 py-5 rounded-2xl bg-transparent font-body text-foreground text-lg placeholder:text-muted-foreground/60 focus:outline-none"
                 dir="auto"
                 onFocus={() => setInputFocused(true)}
                 onBlur={() => setInputFocused(false)}
+                onKeyDown={(e) => e.key === "Enter" && handleGenerate()}
               />
-              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="px-8 py-5 rounded-2xl bg-saffron text-accent-foreground font-body font-bold text-base shadow-[0_4px_0_0_hsl(var(--saffron-dark))] hover:shadow-[0_2px_0_0_hsl(var(--saffron-dark))] hover:translate-y-[2px] transition-all duration-200 flex items-center justify-center gap-2 whitespace-nowrap">
+              <motion.button 
+                whileHover={{ scale: 1.05 }} 
+                whileTap={{ scale: 0.95 }} 
+                onClick={handleGenerate}
+                className="px-8 py-5 rounded-2xl bg-saffron text-accent-foreground font-body font-bold text-base shadow-[0_4px_0_0_hsl(var(--saffron-dark))] hover:shadow-[0_2px_0_0_hsl(var(--saffron-dark))] hover:translate-y-[2px] transition-all duration-200 flex items-center justify-center gap-2 whitespace-nowrap"
+              >
                 {t("aiBuilder.button")}
                 <ArrowIcon size={18} />
               </motion.button>

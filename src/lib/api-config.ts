@@ -7,6 +7,7 @@ export const API_ENDPOINTS = {
   PROFILE: `${API_BASE_URL}/api/v1/users/profile`,
   REFRESH: `${API_BASE_URL}/auth/refresh`,
   LOGOUT: `${API_BASE_URL}/auth/logout`,
+  GOOGLE_LOGIN: `${API_BASE_URL}/auth/google`,
 
   // Projects
   PROJECTS_CREATE: `${API_BASE_URL}/api/v1/projects/create`,
@@ -30,4 +31,8 @@ export const API_ENDPOINTS = {
   PROFILE_PASSWORD: `${API_BASE_URL}/api/v1/profile/password`,
   PROFILE_SETTINGS: `${API_BASE_URL}/api/v1/profile/settings`,
   PROFILE_DELETE: `${API_BASE_URL}/api/v1/profile/delete`,
+
+  // AI
+  AI_GENERATE: `${API_BASE_URL}/api/v1/ai/generate`,
+  AI_PREVIEW: (projectId: number | string) => `${API_BASE_URL}/api/v1/ai/preview/${projectId}`,
 };

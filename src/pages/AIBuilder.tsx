@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { apiPost } from "@/lib/api-client";
-import { API_ENDPOINTS } from "@/lib/api-config";
+import { API_ENDPOINTS, API_BASE_URL } from "@/lib/api-config";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -61,16 +61,24 @@ const INITIAL_HTML = `<!DOCTYPE html>
 
 const AIBuilder = () => {
   const { t } = useTranslation();
-  const [searchParams] = useSearchParams();
-  const projectId = searchParams.get("projectId");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialPrompt = searchParams.get("prompt");
+  const [projectId, setProjectId] = useState<string | null>(searchParams.get("projectId"));
 
   const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(initialPrompt || "");
   const [isGenerating, setIsGenerating] = useState(false);
-  const [previewHtml, setPreviewHtml] = useState(INITIAL_HTML);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
   const [previewMode, setPreviewMode] = useState<"desktop" | "mobile">("desktop");
   const [projectName, setProjectName] = useState(t("aiBuilder.untitled", "Untitled Project"));
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Auto-send if initial prompt is present and no projectId
+  useEffect(() => {
+    if (initialPrompt && !projectId && !isGenerating && messages.length === 0) {
+      handleSend();
+    }
+  }, [initialPrompt, projectId]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -81,12 +89,16 @@ const AIBuilder = () => {
     if (projectId) {
       const loadProject = async () => {
         try {
-          const data = await apiPost<{ project: { name: string; preview_url?: string } }>(
+          const data = await apiPost<{ project: { name: string; preview_url?: string; generated_html?: string } }>(
             API_ENDPOINTS.PROJECTS_GET,
             { projectId: Number(projectId) }
           );
           if (data.project) {
             setProjectName(data.project.name);
+            if (data.project.generated_html) {
+              // @ts-ignore - API_PREVIEW is a function
+              setPreviewUrl(API_ENDPOINTS.AI_PREVIEW(projectId));
+            }
           }
         } catch {
           // silently fail — use default name
@@ -99,6 +111,26 @@ const AIBuilder = () => {
   const handleSend = async () => {
     if (!input.trim() || isGenerating) return;
 
+    let currentProjectId = projectId;
+
+    // 1. If no projectId, create a project first
+    if (!currentProjectId) {
+      try {
+        setIsGenerating(true);
+        const projectData = await apiPost<{ project: { id: number } }>(API_ENDPOINTS.PROJECTS_CREATE, {
+          name: projectName === t("aiBuilder.untitled", "Untitled Project") ? input.trim().slice(0, 30) : projectName,
+          type: "ai_build",
+        });
+        currentProjectId = projectData.project.id.toString();
+        setProjectId(currentProjectId);
+        setSearchParams({ projectId: currentProjectId });
+      } catch (error) {
+        console.error("Failed to create project:", error);
+        setIsGenerating(false);
+        return;
+      }
+    }
+
     const userMessage: Message = {
       id: Date.now().toString(),
       role: "user",
@@ -107,23 +139,37 @@ const AIBuilder = () => {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    const currentInput = input.trim();
     setInput("");
     setIsGenerating(true);
 
-    // Simulate AI response (to be replaced with real AI integration)
-    setTimeout(() => {
+    try {
+      const data = await apiPost<{ previewUrl: string }>(API_ENDPOINTS.AI_GENERATE, {
+        projectId: Number(currentProjectId),
+        prompt: currentInput,
+      });
+
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: t(
-          "aiBuilder.simResponse",
-          "I've analyzed your request. In a production environment, this would generate a live website preview. The AI builder integration will be connected in a future update. For now, you can see how the interface works!"
-        ),
+        content: t("aiBuilder.successMessage", "I've generated your website! You can see it in the preview panel."),
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, aiMessage]);
+      
+      setPreviewUrl(`${API_BASE_URL}${data.previewUrl}`);
+    } catch (error) {
+      console.error("AI Generation failed:", error);
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: t("errors.generationFailed", "Sorry, I encountered an error while generating your site. Please try again."),
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
       setIsGenerating(false);
-    }, 1500);
+    }
   };
 
   const handleSave = async () => {
@@ -140,14 +186,22 @@ const AIBuilder = () => {
     }
   };
 
-  const handleExport = () => {
-    const blob = new Blob([previewHtml], { type: "text/html" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${projectName.toLowerCase().replace(/\s+/g, "-")}.html`;
-    a.click();
-    URL.revokeObjectURL(url);
+  const handleExport = async () => {
+    if (!previewUrl) return;
+
+    try {
+      const response = await fetch(previewUrl);
+      const html = await response.text();
+      const blob = new Blob([html], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${projectName.toLowerCase().replace(/\s+/g, "-")}.html`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Failed to export project:", error);
+    }
   };
 
   return (
@@ -312,13 +366,27 @@ const AIBuilder = () => {
                 previewMode === "mobile" ? "max-w-[375px] w-full" : "w-full"
               }`}
             >
-              <iframe
-                srcDoc={previewHtml}
-                className="w-full h-full border-0"
-                title="Website Preview"
-                sandbox="allow-scripts"
-                id="preview-iframe"
-              />
+              {previewUrl ? (
+                <iframe
+                  src={previewUrl}
+                  className="w-full h-full border-0"
+                  title="Website Preview"
+                  sandbox="allow-scripts allow-same-origin"
+                  id="preview-iframe"
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center text-center p-8 bg-gradient-to-br from-slate-50 to-slate-100">
+                   <div className="w-16 h-16 rounded-full bg-white shadow-md flex items-center justify-center mb-4">
+                      <Sparkles className="text-primary animate-pulse" size={32} />
+                   </div>
+                   <h3 className="text-xl font-display font-bold text-slate-800 mb-2">
+                     {t("aiBuilder.previewReady", "Your Site Preview")}
+                   </h3>
+                   <p className="text-slate-500 max-w-xs">
+                     {t("aiBuilder.previewPlaceholder", "Describe your idea in the chat to generate a live preview of your website.")}
+                   </p>
+                </div>
+              )}
             </div>
           </div>
         </ResizablePanel>

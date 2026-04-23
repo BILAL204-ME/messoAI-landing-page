@@ -150,7 +150,9 @@
     "loginSuccess": "Login Successful",
     "welcomeBack": "Welcome back!",
     "loginError": "Login Failed",
-    "dontHaveAccount": "Don't have an account?"
+    "dontHaveAccount": "Don't have an account?",
+    "orContinueWithEmail": "Or continue with email",
+    "googleAuthFailed": "Google authentication failed"
   },
   "errors": {
     "userAlreadyExists": "It looks like you already have an account. Please try logging in instead.",

@@ -150,7 +150,9 @@
     "loginSuccess": "Connexion réussie",
     "welcomeBack": "Bon retour !",
     "loginError": "Échec de la connexion",
-    "dontHaveAccount": "Vous n'avez pas de compte ?"
+    "dontHaveAccount": "Vous n'avez pas de compte ?",
+    "orContinueWithEmail": "Ou continuer avec l'email",
+    "googleAuthFailed": "L'authentification Google a échoué"
   },
   "errors": {
     "userAlreadyExists": "Il semble que vous ayez déjà un compte. Veuillez essayer de vous connecter à la place.",
