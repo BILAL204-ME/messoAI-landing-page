@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -37,7 +38,8 @@ interface LoginModalProps {
 
 const LoginModal = ({ trigger, open, onOpenChange, onRegisterClick }: LoginModalProps) => {
   const { t, i18n } = useTranslation();
-  const { login, googleLogin } = useAuth();
+  const navigate = useNavigate();
+  const { login, googleLogin, user } = useAuth();
   const { toast } = useToast();
   const { handleAuthError } = useErrorHandler();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -71,6 +73,12 @@ const LoginModal = ({ trigger, open, onOpenChange, onRegisterClick }: LoginModal
         description: t("auth.welcomeBack"),
       });
       if (onOpenChange) onOpenChange(false);
+      // Redirect based on user role - check after login completes
+      if (user?.role === 'admin') {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error: any) {
       const errorResult = handleAuthError(error);
       toast({
@@ -92,6 +100,12 @@ const LoginModal = ({ trigger, open, onOpenChange, onRegisterClick }: LoginModal
         description: t("auth.welcomeBack"),
       });
       if (onOpenChange) onOpenChange(false);
+      // Redirect based on user role - check after login completes
+      if (user?.role === 'admin') {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error: any) {
       const errorResult = handleAuthError(error);
       toast({

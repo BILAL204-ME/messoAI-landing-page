@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -40,7 +41,8 @@ interface RegisterModalProps {
 
 const RegisterModal = ({ trigger, open, onOpenChange, onLoginClick }: RegisterModalProps) => {
   const { t, i18n } = useTranslation();
-  const { register: registerUser, googleLogin } = useAuth();
+  const navigate = useNavigate();
+  const { register: registerUser, googleLogin, user } = useAuth();
   const { toast } = useToast();
   const { handleAuthError } = useErrorHandler();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -88,6 +90,12 @@ const RegisterModal = ({ trigger, open, onOpenChange, onLoginClick }: RegisterMo
         description: t("auth.welcomeMessage"),
       });
       if (onOpenChange) onOpenChange(false);
+      // Redirect based on user role - check after login completes
+      if (user?.role === 'admin') {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error: any) {
       const errorResult = handleAuthError(error);
       toast({
@@ -110,6 +118,12 @@ const RegisterModal = ({ trigger, open, onOpenChange, onLoginClick }: RegisterMo
         description: t("auth.welcomeMessage"),
       });
       if (onOpenChange) onOpenChange(false);
+      // Redirect based on user role - check after registration completes
+      if (user?.role === 'admin') {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error: any) {
       const errorResult = handleAuthError(error, () => {
         if (onLoginClick) onLoginClick();

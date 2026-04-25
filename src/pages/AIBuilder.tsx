@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import {
@@ -11,6 +11,7 @@ import {
   Sparkles,
   Bot,
   User,
+  LayoutDashboard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -61,6 +62,7 @@ const INITIAL_HTML = `<!DOCTYPE html>
 
 const AIBuilder = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialPrompt = searchParams.get("prompt");
   const [projectId, setProjectId] = useState<string | null>(searchParams.get("projectId"));
@@ -209,6 +211,16 @@ const AIBuilder = () => {
       {/* Top Bar */}
       <header className="h-14 border-b border-border bg-card/80 backdrop-blur-sm flex items-center justify-between px-4 shrink-0">
         <div className="flex items-center gap-3">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => navigate("/dashboard")}
+            className="text-muted-foreground hover:text-foreground"
+          >
+            <LayoutDashboard size={18} className="mr-2" />
+            <span className="hidden md:inline">{t("nav.dashboard", "Dashboard")}</span>
+          </Button>
+          <div className="h-6 w-px bg-border hidden md:block mx-1" />
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
             <Sparkles size={16} className="text-white" />
           </div>

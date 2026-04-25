@@ -35,4 +35,16 @@ export const API_ENDPOINTS = {
   // AI
   AI_GENERATE: `${API_BASE_URL}/api/v1/ai/generate`,
   AI_PREVIEW: (projectId: number | string) => `${API_BASE_URL}/api/v1/ai/preview/${projectId}`,
+
+  // Contact
+  CONTACT_SUBMIT: `${API_BASE_URL}/api/v1/contact`,
+
+  // Admin
+  ADMIN_USERS: `${API_BASE_URL}/api/v1/admin/users`,
+  ADMIN_USER_STATUS: (userId: string | number) => `${API_BASE_URL}/api/v1/admin/users/${userId}/status`,
+  ADMIN_USER_ROLE: (userId: string | number) => `${API_BASE_URL}/api/v1/admin/users/${userId}/role`,
+  ADMIN_USER_DELETE: (userId: string | number) => `${API_BASE_URL}/api/v1/admin/users/${userId}`,
+  ADMIN_AUDIT_LOGS: `${API_BASE_URL}/api/v1/admin/audit-logs`,
+  ADMIN_SETTINGS: `${API_BASE_URL}/api/v1/admin/settings`,
+  ADMIN_SETTING_UPDATE: (key: string) => `${API_BASE_URL}/api/v1/admin/settings/${key}`,
 };

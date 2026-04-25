@@ -1,13 +1,28 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import buildoriaLogo from "@/assets/buildoria-logo.png";
 
 const Footer = () => {
   const { t } = useTranslation();
 
   const footerLinks = {
-    [t("footer.product")]: [t("footer.features"), t("footer.aiBuilder"), t("footer.marketplace"), t("footer.pricingLink")],
-    [t("footer.company")]: [t("footer.about"), t("footer.blog"), t("footer.careers"), t("footer.contact")],
-    [t("footer.legal")]: [t("footer.privacy"), t("footer.terms"), t("footer.cookies")],
+    [t("footer.product")]: [
+      [t("footer.features"), "/features"],
+      [t("footer.aiBuilder"), "/ai-builder"],
+      [t("footer.marketplace"), "/marketplace"],
+      [t("footer.pricingLink"), "/pricing"],
+    ],
+    [t("footer.company")]: [
+      [t("footer.about"), "/about"],
+      [t("footer.blog"), "/blog"],
+      [t("footer.careers"), "/careers"],
+      [t("footer.contact"), "/contact"],
+    ],
+    [t("footer.legal")]: [
+      [t("footer.privacy"), "/privacy"],
+      [t("footer.terms"), "/terms"],
+      [t("footer.cookies"), "/cookies"],
+    ],
   };
 
   return (
@@ -26,9 +41,11 @@ const Footer = () => {
             <div key={category}>
               <h4 className="font-display font-bold text-sm uppercase tracking-wider mb-4 text-background/80">{category}</h4>
               <ul className="space-y-2.5">
-                {links.map((link) => (
-                  <li key={link}>
-                    <a href="#" className="font-body text-sm text-background/50 hover:text-background transition-colors duration-200">{link}</a>
+                {links.map(([label, path]) => (
+                  <li key={label as string}>
+                    <Link to={path as string} className="font-body text-sm text-background/50 hover:text-background transition-colors duration-200">
+                      {label as string}
+                    </Link>
                   </li>
                 ))}
               </ul>

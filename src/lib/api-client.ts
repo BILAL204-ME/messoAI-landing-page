@@ -103,3 +103,57 @@ export async function apiPost<T = unknown>(
 
   return data as T;
 }
+
+interface ApiGetOptions extends ApiOptions {
+  queryParams?: Record<string, string | number>;
+}
+
+/**
+ * Make an authenticated GET request.
+ */
+export async function apiGet<T = unknown>(
+  url: string,
+  options: ApiGetOptions = {}
+): Promise<T> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+
+  if (!options.public && accessTokenStore) {
+    headers['Authorization'] = `Bearer ${accessTokenStore}`;
+  }
+
+  let fetchUrl = url;
+  if (options.queryParams) {
+    const params = new URLSearchParams(
+      options.queryParams as Record<string, string>
+    ).toString();
+    fetchUrl += `?${params}`;
+  }
+
+  let response = await fetch(fetchUrl, {
+    method: 'GET',
+    headers,
+    credentials: 'include',
+  });
+
+  if (response.status === 401 && !options.public) {
+    const newToken = await refreshAccessToken();
+    if (newToken) {
+      headers['Authorization'] = `Bearer ${newToken}`;
+      response = await fetch(fetchUrl, {
+        method: 'GET',
+        headers,
+        credentials: 'include',
+      });
+    }
+  }
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw { ...data, status: response.status };
+  }
+
+  return data as T;
+}
